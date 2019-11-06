@@ -18,6 +18,8 @@
 import MainNavbar from './main-navbar'
 import MainSidebar from './main-sidebar'
 import MainContent from './main-content'
+import Vue from 'vue'
+import { info } from '@/api/common'
 export default {
   provide () {
     return {
@@ -77,17 +79,11 @@ export default {
     },
     // 获取当前管理员信息
     getUserInfo () {
-      this.$http({
-        url: this.$http.adornUrl('/sys/user/info'),
-        method: 'get',
-        params: this.$http.adornParams()
-      }).then(({ data }) => {
-        if (data && data.code === 0) {
-          this.loading = false
-          this.userId = data.user.userId
-          this.userName = data.user.username
-          this.userAvatar = data.user.avatar
-        }
+      info().then((data) => {
+        this.loading = false
+        this.userId = data.user.userId
+        this.userName = data.user.username
+        this.userAvatar = data.user.avatar
       })
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="!dataForm.id ? '新增' : '修改'"
+    :title="!dataForm.roleId ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
@@ -24,13 +24,15 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button type="primary" @click="!dataForm.roleId ?createData():updateData()">确定</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
 import { treeDataTranslate } from '@/utils'
+import { fetchList } from '@/api/menu'
+import { info, create, update } from '@/api/role'
 export default {
   data () {
     return {
@@ -42,7 +44,7 @@ export default {
         children: 'children'
       },
       dataForm: {
-        id: 0,
+        roleId: 0,
         roleName: '',
         remark: ''
       },
@@ -77,13 +79,9 @@ export default {
       return temp.join(',').split(',')
     },
     init (id) {
-      this.dataForm.id = id || 0
-      this.$http({
-        url: this.$http.adornUrl('/sys/menu/list'),
-        method: 'get',
-        params: this.$http.adornParams()
-      }).then(({ data }) => {
-        this.menuList = treeDataTranslate(data, 'menuId')
+      this.dataForm.roleId = id || undefined
+      fetchList().then((data) => {
+        this.menuList = treeDataTranslate(data.menu, 'menuId')
       }).then(() => {
         this.visible = true
         this.$nextTick(() => {
@@ -91,13 +89,10 @@ export default {
           this.$refs.menuListTree.setCheckedKeys([])
         })
       }).then(() => {
-        if (this.dataForm.id) {
-          this.$http({
-            url: this.$http.adornUrl(`/sys/role/info/${this.dataForm.id}`),
-            method: 'get',
-            params: this.$http.adornParams()
-          }).then(({ data }) => {
-            if (data && data.code === 0) {
+        if (this.dataForm.roleId) {
+          var id = this.dataForm.roleId
+          info(id).then((data) => {
+            if (data) {
               this.BottomCheck = this.transfer(this.getBottomCheck(treeDataTranslate(data.role.menuIdList, 'menuId')))
               this.dataForm.roleName = data.role.roleName
               this.dataForm.remark = data.role.remark
@@ -106,37 +101,70 @@ export default {
         }
       })
     },
-    // 表单提交
-    dataFormSubmit () {
+    createData () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$http({
-            url: this.$http.adornUrl(`/sys/role/${!this.dataForm.id ? 'save' : 'update'}`),
-            method: 'post',
-            data: this.$http.adornData({
-              'roleId': this.dataForm.id || undefined,
-              'roleName': this.dataForm.roleName,
-              'remark': this.dataForm.remark,
-              'menuIdList': [].concat(this.$refs.menuListTree.getCheckedKeys(), this.$refs.menuListTree.getHalfCheckedKeys())
+          create(this.dataForm).then(response => {
+            this.visible = false
+            this.$emit('refreshDataList')
+            this.$notify({
+              title: 'Success',
+              message: 'Created Successfully',
+              type: 'success',
+              duration: 2000
             })
-          }).then(({ data }) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
+          })
+        }
+      })
+    },
+    updateData () {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.dataForm)
+          update(tempData).then(response => {
+            this.visible = false
+            this.$emit('refreshDataList')
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
           })
         }
       })
     }
+    // 表单提交
+    // dataFormSubmit () {
+    //   this.$refs['dataForm'].validate((valid) => {
+    //     if (valid) {
+    //       this.$http({
+    //         url: this.$http.adornUrl(`/sys/role/${!this.dataForm.id ? 'save' : 'update'}`),
+    //         method: 'post',
+    //         data: this.$http.adornData({
+    //           'roleId': this.dataForm.id || undefined,
+    //           'roleName': this.dataForm.roleName,
+    //           'remark': this.dataForm.remark,
+    //           'menuIdList': [].concat(this.$refs.menuListTree.getCheckedKeys(), this.$refs.menuListTree.getHalfCheckedKeys())
+    //         })
+    //       }).then(({ data }) => {
+    //         if (data && data.code === 0) {
+    //           this.$message({
+    //             message: '操作成功',
+    //             type: 'success',
+    //             duration: 1500,
+    //             onClose: () => {
+    //               this.visible = false
+    //               this.$emit('refreshDataList')
+    //             }
+    //           })
+    //         } else {
+    //           this.$message.error(data.msg)
+    //         }
+    //       })
+    //     }
+    //   })
+    // }
   }
 }
 </script>

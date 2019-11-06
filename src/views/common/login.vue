@@ -10,7 +10,7 @@
           <h3 class="login-title">管理员登录</h3>
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
             <el-form-item prop="userName">
-              <el-input v-model="dataForm.userName" placeholder="帐号"></el-input>
+              <el-input v-model="dataForm.username" placeholder="帐号"></el-input>
             </el-form-item>
             <el-form-item prop="password">
               <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
@@ -37,18 +37,19 @@
 </template>
 
 <script>
+import { login } from '@/api/login'
 // import { getUUID } from '@/utils'
 export default {
   data () {
     return {
       dataForm: {
-        userName: '',
-        password: '',
+        username: '',
+        password: ''
         // uuid: '',
         // captcha: ''
       },
       dataRule: {
-        userName: [
+        username: [
           { required: true, message: '帐号不能为空', trigger: 'blur' }
         ],
         password: [
@@ -69,27 +70,17 @@ export default {
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$http({
-            url: this.$http.adornUrl('/sys/login'),
-            method: 'post',
-            data: this.$http.adornData({
-              'username': this.dataForm.userName,
-              'password': this.dataForm.password
-              // 'uuid': this.dataForm.uuid,
-              // 'captcha': this.dataForm.captcha
-            })
-          }).then(({ data }) => {
-            if (data && data.code === 0) {
-              this.$cookie.set('token', data.token)
+          login(this.dataForm).then((res) => {
+            if (res) {
+              this.$cookie.set('token', res.token)
               this.$router.replace({ name: 'home' })
-            } else {
-              // this.getCaptcha()
-              this.$message.error(data.msg)
             }
           })
+        } else {
+          return false
         }
       })
-    },
+    }
     // // 获取验证码
     // getCaptcha () {
     //   this.dataForm.uuid = getUUID()

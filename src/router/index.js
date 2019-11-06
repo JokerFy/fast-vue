@@ -6,7 +6,7 @@
  */
 import Vue from 'vue'
 import Router from 'vue-router'
-import http from '@/utils/httpRequest'
+import { nav } from '@/api/common'
 import { isURL } from '@/utils/validate'
 import { clearLoginInfo } from '@/utils'
 
@@ -62,12 +62,8 @@ router.beforeEach((to, from, next) => {
   if (router.options.isAddDynamicMenuRoutes || fnCurrentRouteType(to, globalRoutes) === 'global') {
     next()
   } else {
-    http({
-      url: http.adornUrl('/sys/menu/nav'),
-      method: 'get',
-      params: http.adornParams()
-    }).then(({data}) => {
-      if (data && data.code === 0) {
+    nav().then((data) => {
+      if (data) {
         fnAddDynamicMenuRoutes(data.menuList)
         router.options.isAddDynamicMenuRoutes = true
         sessionStorage.setItem('menuList', JSON.stringify(data.menuList || '[]'))
