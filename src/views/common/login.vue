@@ -72,6 +72,7 @@ export default {
         if (valid) {
           login(this.dataForm).then((res) => {
             if (res) {
+              console.log(res)
               this.$cookie.set('token', res.token)
               this.$router.replace({ name: 'home' })
             }

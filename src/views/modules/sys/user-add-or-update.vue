@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="!dataForm.id ? '新增' : '修改'"
+    :title="!dataForm.user_id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
@@ -41,8 +41,7 @@
 <script>
 import { isEmail, isMobile } from '@/utils/validate'
 import { select } from '@/api/role'
-import { info } from '@/api/common'
-import { create, update } from '@/api/admin'
+import { create, update, info } from '@/api/admin'
 export default {
   data () {
     var validatePassword = (rule, value, callback) => {
@@ -80,7 +79,7 @@ export default {
       visible: false,
       roleList: [],
       dataForm: {
-        id: undefined,
+        user_id: undefined,
         username: '',
         password: '',
         comfirmPassword: '',
@@ -126,6 +125,8 @@ export default {
           info(this.dataForm.user_id).then((data) => {
             if (data) {
               this.dataForm.username = data.user.username
+              this.dataForm.password = data.user.password
+              this.dataForm.comfirmPassword = data.user.password
               this.dataForm.salt = data.user.salt
               this.dataForm.email = data.user.email
               this.dataForm.mobile = data.user.mobile
@@ -155,9 +156,10 @@ export default {
     updateData () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log(5555)
           const tempData = Object.assign({}, this.dataForm)
           update(tempData).then(response => {
+            console.log('update')
+            console.log(response)
             this.visible = false
             this.$emit('refreshDataList')
             this.$notify({

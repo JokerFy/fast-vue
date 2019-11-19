@@ -2,32 +2,40 @@ import request from '@/utils/httpRequest'
 
 export function fetchList (data) {
   return request({
-    url: '/sys/user/list',
+    url: '/hy-admin/sys/user/list',
     method: 'get',
     params: data
   })
 }
 
+export function info (data) {
+  return request({
+    url: '/hy-admin/sys/user/infoById',
+    method: 'get',
+    params: { id: data }
+  })
+}
+
 export function create (data) {
   return request({
-    url: '/sys/user/save',
+    url: '/hy-admin/sys/user/save',
     method: 'post',
-    params: data
+    data: data
   })
 }
 
 export function update (data) {
   return request({
-    url: '/sys/user/update',
-    method: 'post',
-    params: data
+    url: '/hy-admin/sys/user/update',
+    method: 'put',
+    data: data
   })
 }
 
 export function deleted (id) {
   return request({
-    url: '/sys/user/delete',
-    method: 'post',
-    params: id
+    url: '/hy-admin/sys/user/delete',
+    method: 'delete',
+    params: { id: id }
   })
 }

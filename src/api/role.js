@@ -2,7 +2,7 @@ import request from '@/utils/httpRequest'
 
 export function fetchList (data) {
   return request({
-    url: '/sys/role/list',
+    url: '/hy-admin/sys/role/list',
     method: 'get',
     params: data
   })
@@ -10,38 +10,39 @@ export function fetchList (data) {
 
 export function info (data) {
   return request({
-    url: '/sys/role/info/' + data,
-    method: 'get'
+    url: '/hy-admin/sys/role/info',
+    method: 'get',
+    params: { id: data }
   })
 }
 
 export function create (data) {
   return request({
-    url: '/sys/role/add',
+    url: '/hy-admin/sys/role/save',
     method: 'post',
-    params: data
+    data: data
   })
 }
 
 export function update (data) {
   return request({
-    url: '/sys/role/update',
-    method: 'post',
-    params: data
+    url: '/hy-admin/sys/role/update',
+    method: 'put',
+    data: data
   })
 }
 
 export function deleted (id) {
   return request({
-    url: '/sys/role/delete',
-    method: 'post',
-    params: id
+    url: '/hy-admin/sys/role/delete',
+    method: 'delete',
+    params: { id: id }
   })
 }
 
 export function select () {
   return request({
-    url: '/sys/role/select',
+    url: '/hy-admin/sys/role/select',
     method: 'get',
     params: {}
   })

@@ -2,7 +2,7 @@ import request from '@/utils/httpRequest'
 
 export function fetchList (data) {
   return request({
-    url: '/sys/menu/list',
+    url: '/hy-admin/sys/menu/list',
     method: 'get',
     params: data
   })
@@ -10,23 +10,23 @@ export function fetchList (data) {
 
 export function create (data) {
   return request({
-    url: '/sys/menu/save',
+    url: '/hy-admin/sys/menu/save',
     method: 'post',
-    params: data
+    data: data
   })
 }
 
 export function update (data) {
   return request({
-    url: '/sys/menu/update',
+    url: '/hy-admin/sys/menu/update',
     method: 'post',
-    params: data
+    data: data
   })
 }
 
 export function deleted (id) {
   return request({
-    url: '/sys/menu/delete',
+    url: '/hy-admin/sys/menu/delete',
     method: 'post',
     params: id
   })
@@ -34,15 +34,15 @@ export function deleted (id) {
 
 export function select () {
   return request({
-    url: '/sys/menu/select',
+    url: '/hy-admin/sys/menu/select',
     method: 'get',
     params: {}
   })
 }
 
-export function info () {
+export function info (id) {
   return request({
-    url: '/sys/menu/info',
+    url: '/hy-admin/sys/menu/info/' + id,
     method: 'get',
     params: {}
   })

@@ -137,12 +137,13 @@ export default {
           this.$refs['dataForm'].resetFields()
         })
       }).then(() => {
-        if (!this.dataForm.id) {
+        if (!this.dataForm.menuId) {
           // 新增
           this.menuListTreeSetCurrentNode()
         } else {
           // 修改
           info(this.dataForm.menuId).then((data) => {
+            console.log(data)
             this.dataForm.menuId = data.menu.menuId
             this.dataForm.type = data.menu.type
             this.dataForm.name = data.menu.name
@@ -203,41 +204,6 @@ export default {
         }
       })
     }
-    // 表单提交
-    // dataFormSubmit () {
-    //   this.$refs['dataForm'].validate((valid) => {
-    //     if (valid) {
-    //       this.$http({
-    //         url: this.$http.adornUrl(`/sys/menu/${!this.dataForm.id ? 'save' : 'update'}`),
-    //         method: 'post',
-    //         data: this.$http.adornData({
-    //           'menuId': this.dataForm.id || undefined,
-    //           'type': this.dataForm.type,
-    //           'name': this.dataForm.name,
-    //           'parentId': this.dataForm.parentId,
-    //           'url': this.dataForm.url,
-    //           'perms': this.dataForm.perms,
-    //           'orderNum': this.dataForm.orderNum,
-    //           'icon': this.dataForm.icon
-    //         })
-    //       }).then(({ data }) => {
-    //         if (data && data.code === 0) {
-    //           this.$message({
-    //             message: '操作成功',
-    //             type: 'success',
-    //             duration: 1500,
-    //             onClose: () => {
-    //               this.visible = false
-    //               this.$emit('refreshDataList')
-    //             }
-    //           })
-    //         } else {
-    //           this.$message.error(data.msg)
-    //         }
-    //       })
-    //     }
-    //   })
-    // }
   }
 }
 </script>

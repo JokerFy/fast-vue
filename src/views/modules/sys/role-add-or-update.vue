@@ -104,6 +104,7 @@ export default {
     createData () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.dataForm.menuIdList = [1, 2, 3]
           create(this.dataForm).then(response => {
             this.visible = false
             this.$emit('refreshDataList')
