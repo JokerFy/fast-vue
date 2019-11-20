@@ -104,7 +104,7 @@ export default {
     createData () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.dataForm.menuIdList = [1, 2, 3]
+          this.dataForm.menuIdList = [].concat(this.$refs.menuListTree.getCheckedKeys(), this.$refs.menuListTree.getHalfCheckedKeys())
           create(this.dataForm).then(response => {
             this.visible = false
             this.$emit('refreshDataList')
@@ -121,8 +121,8 @@ export default {
     updateData () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.dataForm)
-          update(tempData).then(response => {
+          this.dataForm.menuIdList = [].concat(this.$refs.menuListTree.getCheckedKeys(), this.$refs.menuListTree.getHalfCheckedKeys())
+          update(this.dataForm).then(response => {
             this.visible = false
             this.$emit('refreshDataList')
             this.$notify({
@@ -135,37 +135,6 @@ export default {
         }
       })
     }
-    // 表单提交
-    // dataFormSubmit () {
-    //   this.$refs['dataForm'].validate((valid) => {
-    //     if (valid) {
-    //       this.$http({
-    //         url: this.$http.adornUrl(`/sys/role/${!this.dataForm.id ? 'save' : 'update'}`),
-    //         method: 'post',
-    //         data: this.$http.adornData({
-    //           'roleId': this.dataForm.id || undefined,
-    //           'roleName': this.dataForm.roleName,
-    //           'remark': this.dataForm.remark,
-    //           'menuIdList': [].concat(this.$refs.menuListTree.getCheckedKeys(), this.$refs.menuListTree.getHalfCheckedKeys())
-    //         })
-    //       }).then(({ data }) => {
-    //         if (data && data.code === 0) {
-    //           this.$message({
-    //             message: '操作成功',
-    //             type: 'success',
-    //             duration: 1500,
-    //             onClose: () => {
-    //               this.visible = false
-    //               this.$emit('refreshDataList')
-    //             }
-    //           })
-    //         } else {
-    //           this.$message.error(data.msg)
-    //         }
-    //       })
-    //     }
-    //   })
-    // }
   }
 }
 </script>

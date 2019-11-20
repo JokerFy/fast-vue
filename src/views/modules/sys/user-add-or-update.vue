@@ -125,8 +125,6 @@ export default {
           info(this.dataForm.user_id).then((data) => {
             if (data) {
               this.dataForm.username = data.user.username
-              this.dataForm.password = data.user.password
-              this.dataForm.comfirmPassword = data.user.password
               this.dataForm.salt = data.user.salt
               this.dataForm.email = data.user.email
               this.dataForm.mobile = data.user.mobile

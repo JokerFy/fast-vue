@@ -190,8 +190,7 @@ export default {
     updateData () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.dataForm)
-          update(tempData).then(response => {
+          update(this.dataForm).then(response => {
             this.visible = false
             this.$emit('refreshDataList')
             this.$notify({

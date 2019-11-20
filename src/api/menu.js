@@ -19,7 +19,7 @@ export function create (data) {
 export function update (data) {
   return request({
     url: '/hy-admin/sys/menu/update',
-    method: 'post',
+    method: 'put',
     data: data
   })
 }
@@ -28,7 +28,7 @@ export function deleted (id) {
   return request({
     url: '/hy-admin/sys/menu/delete',
     method: 'post',
-    params: id
+    params: { id: id }
   })
 }
 
