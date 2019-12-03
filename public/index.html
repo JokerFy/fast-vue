@@ -8,7 +8,7 @@
   <link rel="shortcut icon" href="<%= BASE_URL %>favicon.ico">
   <!-- 站点配置 -->
   <script>
-
+    console.log()
     window.SITE_CONFIG = {};
     window.SITE_CONFIG['version'] = 'v1.1.0';
     window.SITE_CONFIG['nodeEnv'] = '<%= process.env.VUE_APP_NODE_ENV %>';
@@ -38,7 +38,7 @@
   <% } %>
   <!-- 生产环境 -->
   <% if (process.env.VUE_APP_NODE_ENV === 'production') { %>
-    <script>window.SITE_CONFIG['apiURL'] = 'http://localhost:8080';</script>
+    <script>window.SITE_CONFIG['apiURL'] = 'http://localhost:9501';</script>
   <% } %>
 </head>
 <body>
