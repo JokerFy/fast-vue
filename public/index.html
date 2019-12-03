@@ -8,9 +8,11 @@
   <link rel="shortcut icon" href="<%= BASE_URL %>favicon.ico">
   <!-- 站点配置 -->
   <script>
+
     window.SITE_CONFIG = {};
     window.SITE_CONFIG['version'] = 'v1.1.0';
     window.SITE_CONFIG['nodeEnv'] = '<%= process.env.VUE_APP_NODE_ENV %>';
+    console.log( '<%= process.env.VUE_APP_HOST %>')
     // window.SITE_CONFIG['apiURL'] = 'http://mycentos.com:8666';                      // api请求地址
     window.SITE_CONFIG['apiURL'] = 'http://127.0.0.1:9888';                      // api请求地址
     window.SITE_CONFIG['storeState'] = {};                  // vuex本地储存初始化状态（用于不刷新页面的情况下，也能重置初始化项目中所有状态）
@@ -34,16 +36,8 @@
   <% if (process.env.VUE_APP_NODE_ENV === 'dev') { %>
     <script>window.SITE_CONFIG['apiURL'] = 'http://demo.open.renren.io/renren-fast-server';</script>
   <% } %>
-  <!-- 集成测试环境 -->
-  <% if (process.env.VUE_APP_NODE_ENV === 'prod:sit') { %>
-    <script>window.SITE_CONFIG['apiURL'] = 'http://localhost:8080';</script>
-  <% } %>
-  <!-- 验收测试环境 -->
-  <% if (process.env.VUE_APP_NODE_ENV === 'prod:uat') { %>
-    <script>window.SITE_CONFIG['apiURL'] = 'http://localhost:8080';</script>
-  <% } %>
   <!-- 生产环境 -->
-  <% if (process.env.VUE_APP_NODE_ENV === 'prod') { %>
+  <% if (process.env.VUE_APP_NODE_ENV === 'production') { %>
     <script>window.SITE_CONFIG['apiURL'] = 'http://localhost:8080';</script>
   <% } %>
 </head>
